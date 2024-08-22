@@ -12,12 +12,12 @@ defaults:
     shell: bash
 jobs:
   build_and_test:
-      name: build_and_test_binaries_${{ matrix.ROS_DISTRO }}
+      name: build_and_test_${{ matrix.ROS_DISTRO == 'rolling' && 'sources' || 'binaries' }}_${{ matrix.ROS_DISTRO }}
       strategy:
         matrix:
           ROS_DISTRO: [rolling, jazzy, iron]
       env:
-        ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.distro }}/ros2.repos'
+        ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
       runs-on: ubuntu-latest
       container:
         image: rostooling/setup-ros-docker:ubuntu-noble-latest
