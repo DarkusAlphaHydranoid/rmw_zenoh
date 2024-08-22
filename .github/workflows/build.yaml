@@ -30,7 +30,7 @@ jobs:
       ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
     runs-on: ubuntu-latest
     steps:
-    - uses: ros-tooling/setup-ros@v0.7.1
+    - uses: ros-tooling/setup-ros@v0.7.7
       with:
         required-ros-distributions: ${{ matrix.ROS_DISTRO }}
     - name: Build and run tests
