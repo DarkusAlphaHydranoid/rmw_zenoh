@@ -20,15 +20,20 @@ jobs:
           # Rolling (source)
           - ROS_DISTRO: rolling
             BUILD_TYPE: source
+            DOCKER_IMAGE: ubuntu:noble
           # Jazzy (binary)
           - ROS_DISTRO: jazzy
             BUILD_TYPE: binary
+            DOCKER_IMAGE: ubuntu:noble
           # Iron (binary)
           - ROS_DISTRO: iron
             BUILD_TYPE: binary
+            DOCKER_IMAGE: ubuntu:jammy
     env:
       ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
     runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.DOCKER_IMAGE }}
     steps:
     - uses: ros-tooling/setup-ros@v0.7
       with:
