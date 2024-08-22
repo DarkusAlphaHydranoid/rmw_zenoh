@@ -16,6 +16,8 @@ jobs:
       strategy:
         matrix:
           ROS_DISTRO: [rolling, jazzy, iron]
+      env:
+        ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.distro }}/ros2.repos'
       runs-on: ubuntu-latest
       container:
         image: rostooling/setup-ros-docker:ubuntu-noble-latest
@@ -28,4 +30,4 @@ jobs:
             rmw_zenoh_cpp
             zenoh_c_vendor
           target-ros2-distro: ${{ matrix.ROS_DISTRO }}
-          vcs-repo-file-url: https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos
+          vcs-repo-file-url: ${{ matrix.ROS_DISTRO == 'rolling' && env.ROS2_REPOS_FILE_URL || '' }}
