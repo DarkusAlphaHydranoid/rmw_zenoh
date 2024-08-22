@@ -12,23 +12,33 @@ defaults:
     shell: bash
 jobs:
   build_and_test:
-      name: build_and_test_${{ matrix.ROS_DISTRO == 'rolling' && 'sources' || 'binaries' }}_${{ matrix.ROS_DISTRO }}
-      strategy:
-        matrix:
-          ROS_DISTRO: [rolling, jazzy, iron]
-      env:
-        ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
-      runs-on: ubuntu-latest
-      steps:
-      - uses: ros-tooling/setup-ros@v0.7
-        with:
-          required-ros-distributions: ${{ matrix.ROS_DISTRO }}
-      - name: Build and run tests
-        id: action-ros-ci
-        uses: ros-tooling/action-ros-ci@v0.3
-        with:
-          package-name: |
-            rmw_zenoh_cpp
-            zenoh_c_vendor
-          target-ros2-distro: ${{ matrix.ROS_DISTRO }}
-          vcs-repo-file-url: ${{ matrix.ROS_DISTRO == 'rolling' && env.ROS2_REPOS_FILE_URL || '' }}
+    name: build_and_test_${{ matrix.BUILD_TYPE }}_${{ matrix.ROS_DISTRO }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Rolling (source)
+          - ROS_DISTRO: rolling
+            BUILD_TYPE: source
+          # Jazzy (binary)
+          - ROS_DISTRO: jazzy
+            BUILD_TYPE: binary
+          # Iron (binary)
+          - ROS_DISTRO: iron
+            BUILD_TYPE: binary
+    env:
+      ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: ros-tooling/setup-ros@v0.7
+      with:
+        required-ros-distributions: ${{ matrix.ROS_DISTRO }}
+    - name: Build and run tests
+      id: action-ros-ci
+      uses: ros-tooling/action-ros-ci@v0.3
+      with:
+        package-name: |
+          rmw_zenoh_cpp
+          zenoh_c_vendor
+        target-ros2-distro: ${{ matrix.ROS_DISTRO }}
+        vcs-repo-file-url: ${{ matrix.BUILD_TYPE == 'source' && env.ROS2_REPOS_FILE_URL || '' }}
