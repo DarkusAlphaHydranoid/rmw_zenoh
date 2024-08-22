@@ -20,13 +20,15 @@ jobs:
         ROS2_REPOS_FILE_URL: 'https://raw.githubusercontent.com/ros2/ros2/${{ matrix.ROS_DISTRO }}/ros2.repos'
       runs-on: ubuntu-latest
       steps:
-        - uses: ros-tooling/setup-ros@v0.7
-        - name: Build and run tests
-          id: action-ros-ci
-          uses: ros-tooling/action-ros-ci@v0.3
-          with:
-            package-name: |
-              rmw_zenoh_cpp
-              zenoh_c_vendor
-            target-ros2-distro: ${{ matrix.ROS_DISTRO }}
-            vcs-repo-file-url: ${{ matrix.ROS_DISTRO == 'rolling' && env.ROS2_REPOS_FILE_URL || '' }}
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: ${{ matrix.ROS_DISTRO }}
+      - name: Build and run tests
+        id: action-ros-ci
+        uses: ros-tooling/action-ros-ci@v0.3
+        with:
+          package-name: |
+            rmw_zenoh_cpp
+            zenoh_c_vendor
+          target-ros2-distro: ${{ matrix.ROS_DISTRO }}
+          vcs-repo-file-url: ${{ matrix.ROS_DISTRO == 'rolling' && env.ROS2_REPOS_FILE_URL || '' }}
