@@ -12,11 +12,10 @@ defaults:
     shell: bash
 jobs:
   build_and_test:
-      name: build_and_test ${{ matrix.ROS_DISTRO }} (${{ matrix.ROS_REPO }})
+      name: build_and_test_binaries_${{ matrix.ROS_DISTRO }}
       strategy:
         matrix:
           ROS_DISTRO: [rolling, jazzy, iron]
-          ROS_REPO: [testing, main]
       runs-on: ubuntu-latest
       container:
         image: rostooling/setup-ros-docker:ubuntu-noble-latest
