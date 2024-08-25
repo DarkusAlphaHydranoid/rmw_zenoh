@@ -36,8 +36,8 @@ jobs:
       if: ${{ matrix.BUILD_TYPE == 'source' }}
       # with:
       #   required-ros-distributions: ${{ matrix.BUILD_TYPE == 'binary' && matrix.ROS_DISTRO || ''}}
-    # - name: install_tools
-    #   run: sudo apt update && sudo apt install -y ccache clang clang-tools lld wget python3-pip python3-colcon-coveragepy-result python3-colcon-lcov-result lcov
+    - name: install_tools
+      run: sudo apt update && sudo apt install -y ccache clang clang-tools lld wget python3-pip python3-colcon-coveragepy-result python3-colcon-lcov-result lcov
     - name: Build and run tests
       id: action-ros-ci
       uses: ros-tooling/action-ros-ci@v0.3
